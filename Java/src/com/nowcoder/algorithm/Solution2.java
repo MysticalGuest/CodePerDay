@@ -35,7 +35,6 @@ public class Solution2 {
         if(head.next==null)
         	return false;
         while(slow.next!=null && fast.next.next!=null) {
-        	System.out.println("123");
         	if(slow!=null) {
         		if (slow.next!=null) {
         			slow=slow.next;
@@ -83,20 +82,20 @@ public class Solution2 {
 			}
 		}
 		
-		l.next=null; // 不加环
-		
+//		l.next=null; // 不加环
+		l.next=temp; // 加环
 		l=ln;
 
-		while (l!=null) {
-			System.out.println("ln.val : "+l.val);
-			l=l.next;
-		}
-
-//		l.next=temp; // 加环
-//		for (int i = 1; i<=40; i++) {
+//		while (l!=null) {
 //			System.out.println("ln.val : "+l.val);
 //			l=l.next;
 //		}
+
+		
+		for (int i = 1; i<=40; i++) {
+			System.out.println("ln.val : "+l.val);
+			l=l.next;
+		}
 		Solution2 s2 = new Solution2();
 		System.out.println("Is there a ring? "+s2.hasCycle(ln));
 		
