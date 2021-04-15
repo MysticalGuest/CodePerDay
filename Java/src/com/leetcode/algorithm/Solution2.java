@@ -2,8 +2,6 @@ package com.leetcode.algorithm;
 
 import java.util.Scanner;
 
-import com.sun.org.apache.regexp.internal.recompile;
-
 /// 罗马数字转整数
 
 /*
@@ -120,5 +118,7 @@ public class Solution2 {
 		
 		System.out.println(s2.romanToInt(input));
 		System.out.println(s2.romanToInt1(input));
+		
+		sc.close();
 	}
 }
