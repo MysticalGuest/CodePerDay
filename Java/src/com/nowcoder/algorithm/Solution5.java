@@ -1,7 +1,6 @@
 package com.nowcoder.algorithm;
 
 import java.math.BigInteger;
-import java.util.Iterator;
 import java.util.Stack;
 
 /*
