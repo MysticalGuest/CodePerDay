@@ -28,7 +28,7 @@ public class Solution6 {
     	int row = vw.length;
     	if(row==0||n==0)
     		return 0;
-    	int col = vw[0].length;
+//    	int col = vw[0].length;
     	if (vw[0].length<2) {
 			return 0;
 		}
@@ -89,9 +89,9 @@ public class Solution6 {
 		 * */
 		
 		Solution6 s6 = new Solution6();
-//		System.out.println(s6.knapsack(10, 2, arr));
-//		System.out.println(s6.knapsack(10, 0, arr1));
-//		System.out.println(s6.knapsack(10, 5, arr2));
+		System.out.println(s6.knapsack(10, 2, arr));
+		System.out.println(s6.knapsack(10, 0, arr1));
+		System.out.println(s6.knapsack(10, 5, arr2));
 		System.out.println(s6.knapsack(10, 5, arr3));
 	}
 
