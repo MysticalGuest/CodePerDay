@@ -1,9 +1,6 @@
 package com.nowcoder.algorithm;
 
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
-import java.util.Iterator;
 
 /// 数组中出现次数超过一半的数字
 
