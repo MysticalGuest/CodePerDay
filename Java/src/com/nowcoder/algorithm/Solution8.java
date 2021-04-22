@@ -18,7 +18,7 @@ class Solution8 {
      * @return bool布尔型
      */
     public boolean isValid (String s) {
-    	if (s.length()<=1||s.length()%2!=0) {
+    	if (s.length()<=1||s.length() % 2 != 0) {
 			return false;
 		}
         Stack<Character> st = new Stack<>();
