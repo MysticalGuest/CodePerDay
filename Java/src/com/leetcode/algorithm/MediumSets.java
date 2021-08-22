@@ -300,4 +300,185 @@ public class MediumSets {
         }
     }
     
+    @Test
+    public void testJumpGame() {
+
+        /*
+         * 输入：nums = [2,3,1,1,4]
+         * 输出：true
+         * 解释：可以先跳 1 步，从下标 0 到达下标 1, 然后再从下标 1 跳 3 步到达最后一个下标。
+         * */
+        int nums[]= {2,3,1,1,4,1};
+        System.out.println(canJump(nums));
+        
+        /*
+         * 输入：nums = [3,2,1,0,4]
+         * 输出：false
+         * 解释：无论怎样，总会到达下标为 3 的位置。但该下标的最大跳跃长度是 0 ， 所以永远不可能到达最后一个下标。
+         * */
+        int nums1[]= {3,2,1,0,4};
+        System.out.println(canJump(nums1));
+        
+        /*
+         * 递归：
+         * 未通过用例：[2,5,0,0]
+         * 输出：false
+         * 预期：true
+         * */
+        int nums2[]= {2,5,0,0};
+        System.out.println(canJump(nums2));
+        
+        /*
+         * 方法二：
+         * 未通过用例：[0,1]
+         * 输出：true
+         * 预期：false
+         * */
+        int nums3[]= {0,1};
+        System.out.println(canJump(nums3));
+        
+        /*
+         * 方法二：
+         * 未通过用例：[0]
+         * 输出：false
+         * 预期：true
+         * */
+        int nums4[]= {0};
+        System.out.println(canJump(nums4));
+        
+        /*
+         * 方法二：
+         * 未通过用例：[2,0,0]
+         * 输出：false
+         * 预期：true
+         * */
+        int nums5[]= {2,0,0};
+        System.out.println(canJump(nums5));
+        
+        
+        
+    }
+    
+    public boolean canJump(int[] nums) {
+//        return canJump(nums, 0);
+
+        if (nums.length<=1) {
+            return true;
+        }
+        for (int i = 0; i < nums.length; i++) {
+            int j;
+            for (j = 0; j < i; j++) {
+                // 该点可以到达
+                if (j+nums[j]>i) {
+                    break;
+                }
+            }
+            if (j>=i&&nums[i]==0&&i<nums.length-1) {
+                return false;
+            }
+        }
+        return true;
+        /*
+         * 执行用时：600 ms, 在所有 Java 提交中击败了6.08%的用户
+         * 内存消耗：39.4 MB, 在所有 Java 提交中击败了97.76%的用户
+         * */
+    }
+    
+    public boolean canJump(int[] nums, int startIndex) {
+        if (startIndex>=nums.length) {
+            return true;
+        }
+//        boolean b=false;
+//        if (startIndex == nums.length-1) {
+//            return true;
+//        }
+//        for (int i = 1; i <= nums[startIndex]; i++) {
+//            b = b||canJump(nums, startIndex+i);
+//            if (b) {
+//                return b;
+//            }
+//        }
+//        return false;
+        
+        boolean b=false;
+        if (startIndex == nums.length-1) {
+            return true;
+        }
+        for (int i = nums[startIndex]; i>0 ; i--) {
+            b = b||canJump(nums, startIndex+i);
+            if (b) {
+                return b;
+            }
+        }
+        return false;
+        /*超出时间限制，不能用递归？*/
+    }
+    
+    // 官方：贪心算法
+    public boolean canJumpOffical(int[] nums) {
+        int n = nums.length;
+        int rightmost = 0;
+        for (int i = 0; i < n; ++i) {
+            if (i <= rightmost) {
+                rightmost = Math.max(rightmost, i + nums[i]);
+                if (rightmost >= n - 1) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+    
+    @Test
+    /*
+     * 给你一个整数数组 nums 和一个整数 target 。
+     * 向数组中的每个整数前添加 '+' 或 '-' ，然后串联起所有整数，可以构造一个 表达式 ：
+     * 例如，nums = [2, 1] ，可以在 2 之前添加 '+' ，在 1 之前添加 '-' ，然后串联起来得到表达式 "+2-1" 。
+     * 返回可以通过上述方法构造的、运算结果等于 target 的不同 表达式 的数目。
+     * */
+    public void testTarget() {
+        /*
+         * 输入：nums = [1,1,1,1,1], target = 3
+         * 输出：5
+         * 解释：一共有 5 种方法让最终目标和为 3 。
+         * -1 + 1 + 1 + 1 + 1 = 3
+         * +1 - 1 + 1 + 1 + 1 = 3
+         * +1 + 1 - 1 + 1 + 1 = 3
+         * +1 + 1 + 1 - 1 + 1 = 3
+         * +1 + 1 + 1 + 1 - 1 = 3
+         * */
+        int nums1[] = {1,1,1,1,1};
+        System.out.println(findTargetSumWays(nums1, 3));
+        
+        /*
+         * 输入：nums = [1], target = 1
+         * 输出：1
+         * */
+        int nums2[] = {1};
+        System.out.println(findTargetSumWays(nums2, 1));
+        
+    }
+    
+    // 回溯
+    public int findTargetSumWays(int[] nums, int target) {
+        return findTargetSum(nums, target, 0, 0);
+        /*
+         * 执行用时：694 ms, 在所有 Java 提交中击败了12.56%的用户
+         * 内存消耗：35.6 MB, 在所有 Java 提交中击败了99.19%的用户
+         * */
+    }
+    
+    public int findTargetSum(int[] nums, int target, int index, int sum) {
+        int num=0, len=nums.length;
+        if (sum==target && index==len) {
+            return 1;
+        }
+        if (index>=len) {
+            return 0;
+        }
+        num += findTargetSum(nums, target, index+1, sum+nums[index]);
+        num += findTargetSum(nums, target, index+1, sum-nums[index]);
+        return num;
+    }
+    
 }
