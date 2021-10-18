@@ -1,6 +1,10 @@
  package com.leetcode.algorithm;
 
+import static org.junit.Assert.assertNotNull;
+
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Deque;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -1066,6 +1070,96 @@ public class SimpleSets {
             return false;
         }
     }
+    
+    public int maxDepth(TreeNode root) {
+        if (root!=null) {
+            int leftDepth = maxDepth(root.left)+1;
+            int rightDepth = maxDepth(root.right)+1;
+            return leftDepth > rightDepth ? leftDepth : rightDepth;
+        }
+        return 0;
+        /**
+         * 执行用时：0 ms, 在所有 Java 提交中击败了100.00%的用户
+         * 内存消耗：38.1 MB, 在所有 Java 提交中击败了90.51%的用户
+         */
+    }
+    
+    /**
+     * 将有序数组转换为二叉搜索树,转换为一棵 高度平衡 二叉搜索树
+     * @param nums
+     * @return
+     */
+    public TreeNode sortedArrayToBST(int[] nums) {
+        TreeNode root = new TreeNode(nums[0]);
+        return root;
+    }
+    
+    /**
+     * 给定一个二叉树，找出其最小深度。最小深度是从根节点到最近叶子节点的最短路径上的节点数量。
+     * @param root
+     * @return
+     * 重要!当时没写出来
+     */
+//    [-9,-3,2,null,4,4,0,-6,null,-5]
+    public int minDepth(TreeNode root) {
+        if (root==null) {
+            return 0;
+        }
+        if (root.left==null && root.right==null) {
+            return 1;
+        }
+        int minDepth = Integer.MAX_VALUE;
+        if (root.left!=null) {
+            minDepth = Math.min(minDepth(root.left), minDepth);
+        }
+        if (root.right!=null) {
+            minDepth = Math.min(minDepth(root.right), minDepth);
+        }
+        return minDepth+1;
+        /**
+         * 执行用时：5 ms, 在所有 Java 提交中击败了71.48%的用户内存消耗：
+         * 58.8 MB, 在所有 Java 提交中击败了48.27%的用户
+         */
+    }
+    
+    public int singleNumber(int[] nums) {
+        int len = nums.length;
+        Map<Integer, Integer> map = new HashMap<>();
+        for(int i=0; i<len; i++){
+            if(map.containsKey(nums[i])) {
+                map.put(nums[i], map.get(nums[i])+1);
+            }
+            else {
+                map.put(nums[i], 1);
+            }
+        }
+        for (Map.Entry<Integer, Integer> entry : map.entrySet()) {
+            if (entry.getValue()==1) {
+                return entry.getKey();
+            }
+        }
+        return 0;
+    }
+    
+    @Test
+    public void testMinStack() {
+        MinStack minStack = new MinStack();
+        minStack.push(-2);
+        minStack.push(0);
+        minStack.push(-3);
+//        System.out.println(minStack.toString());
+        System.out.println(minStack.getMin());
+        minStack.pop();
+//        System.out.println(minStack.toString());
+        System.out.println(minStack.top());
+        System.out.println(minStack.getMin());
+    }
+    
+    @Test
+    public void testConvertToTitle() {
+        System.out.println(3+'A');
+        System.out.println((char)68);
+    }
 }
 
 /**
@@ -1081,16 +1175,64 @@ class ListNode {
 
 /**
  * Definition for a binary tree node.
+ * LeafSimilarTrees.java中已定义
  */
-class TreeNode {
-    int val;
-    TreeNode left;
-    TreeNode right;
-    TreeNode() {}
-    TreeNode(int val) { this.val = val; }
-    TreeNode(int val, TreeNode left, TreeNode right) {
-        this.val = val;
-        this.left = left;
-        this.right = right;
+//class TreeNode {
+//    int val;
+//    TreeNode left;
+//    TreeNode right;
+//    TreeNode() {}
+//    TreeNode(int val) { this.val = val; }
+//    TreeNode(int val, TreeNode left, TreeNode right) {
+//        this.val = val;
+//        this.left = left;
+//        this.right = right;
+//    }
+//}
+
+class MinStack {
+
+    private ArrayList<Integer> list;
+    private int top=-1;
+
+    /** initialize your data structure here. */
+    MinStack() {
+        list = new ArrayList<>();
     }
+    
+    public void push(int val) {
+        this.top++;
+        this.list.add(val);
+    }
+    
+    public void pop() {
+        if (top > -1) {
+            this.list.remove(top);
+            top--;
+        }
+    }
+    
+    public int top() {
+        if(top > -1){
+            return this.list.get(top);
+        }
+        return -1;
+    }
+    
+    public int getMin() {
+        if(top > -1){
+            return Collections.min(list);
+        }
+        return -1;
+    }
+    
 }
+
+/**
+ * Your MinStack object will be instantiated and called as such:
+ * MinStack obj = new MinStack();
+ * obj.push(val);
+ * obj.pop();
+ * int param_3 = obj.top();
+ * int param_4 = obj.getMin();
+ */
