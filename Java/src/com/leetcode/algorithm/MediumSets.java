@@ -481,4 +481,103 @@ public class MediumSets {
         return num;
     }
     
+    @Test
+    public void testZigZagConversion() {
+//        System.out.println(convert("PAYPALISHIRING", 2));
+//        System.out.println(convert("PAYPALISHIRING", 3));
+//        System.out.println(convert("PAYPALISHIRING", 4));
+//        System.out.println(convert("Apalindromeisaword,phrase,number,orothersequenceofunitsthatcanbereadthesamewayineitherdirection,withgeneralallowancesforadjustmentstopunctuationandworddividers.", 3));
+//        System.out.println(convert("AB", 5));
+//        System.out.println(convert("PAYPALISHIRING", 5));
+//        System.out.println(convert("PAYPALISHIRING", 7));
+        int l=34;
+        System.out.println(1&1);
+        System.out.println(0&1);
+        System.out.println(100&1);
+        System.out.println(101&1);
+        System.out.println(l&1);
+    }
+    
+    // 内存超出限制，这个二维数组的大小控制不来
+    public String myconvert(String s, int numRows) {
+        int len = s.length();
+        System.out.println("len:  "+len);
+        if(len==1||numRows==1||len<numRows){
+            return s;
+        }
+        StringBuilder res = new StringBuilder();
+        int cols = len*numRows;//超出内存限制,Java动态二维数组比较麻烦,有时间可以尝试其他语言
+        char[][] c=new char[numRows][cols];
+//        ArrayList<Integer> c[] = new ArrayList[numRows];
+        boolean flag = true;
+        for(int i=0, m=0, n=0; i<len; i++){
+            
+            if(m<numRows && flag){
+                System.out.println("1:::m: "+m+" n: "+n+"  i:"+i);
+                c[m][n]=s.charAt(i);
+                m++;
+            }
+            else{
+                if (m==numRows) {
+                    m--;
+                }
+                n++;
+                m--;
+                if (flag) {
+                    flag=!flag;
+                }
+                if(m==0){
+                    flag=!flag;
+                    i--;
+                    continue;
+                }
+                System.out.println("2:::m: "+m+" n: "+n+"  i:"+i);
+                c[m][n]=s.charAt(i);
+            }
+            
+        }
+        for (int i = 0; i < numRows; i++) {
+            for (int j = 0; j < cols; j++) {
+                if (c[i][j]=='\u0000') {
+                    System.out.print(" ");
+                }
+                else {
+                    res.append(c[i][j]);
+                    System.out.print(c[i][j]);
+                }
+//                if (c[i][j]!='\u0000') {
+//                    res.append(c[i][j]);
+//                }
+                
+            }
+            System.out.println();
+        }
+        return res.toString();
+    }
+    
+    // 按行排序
+    public String convert(String s, int numRows) {
+        if (s.length()<2) {
+            return s;
+        }
+        // 画图可以看出，字母的变化，行（横）坐标一会儿递增一会儿递减，flag在正负1之间变化来控制横坐标移动
+        int flag=-1, r=0;
+        ArrayList<StringBuilder> sort = new ArrayList<StringBuilder>();
+        for (int i = 0; i < numRows; i++) {
+            sort.add(new StringBuilder());
+        }
+        for (int i = 0; i < s.length(); i++) {
+            sort.get(r).append(s.charAt(i));
+            if (r==0||r==numRows-1) {
+                flag=-flag;
+            }
+            r+=flag;
+        }
+        String res="";
+        for (StringBuilder sb:sort) {
+            res+=sb.toString();
+        }
+        return res;
+    }
+    
 }
