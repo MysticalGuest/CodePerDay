@@ -580,4 +580,69 @@ public class MediumSets {
         return res;
     }
     
+    @Test
+    public void testMyAtoi() {
+//        String s = "   as23      ::    ";
+//        System.out.println(s.intern());
+//        String s1= s.trim();
+//        System.out.println(s1);
+//        System.out.println(String.valueOf(false)+"  "+String.valueOf(true));
+//        System.out.println(String.valueOf(123));
+//        System.out.println(Integer.parseInt("001231"));
+//        String s2 = "-91283472332";
+//        System.out.println(s2.compareTo("-2147483648"));
+//        String s3 = "-283472332";
+//        System.out.println(s3.compareTo("-2147483648"));
+//        String s4 = "41283472332";
+//        System.out.println(s4.compareTo("2147483647"));
+//        String s5 = "343434";
+//        System.out.println(s5.compareTo("2147483647"));
+        System.out.println(myAtoi("words and 987"));
+        System.out.println(myAtoi("+-12"));
+    }
+    
+    public int myAtoi(String s) {
+        String st = s.trim();
+        boolean flag = true; // 默认为正数
+        StringBuilder sb = new StringBuilder();
+        char[] cs = st.toCharArray();
+        int op=0;
+        for(int i=0; i<cs.length; i++) {
+            if(cs[i]=='-') {
+                flag = false;
+            }
+            if (cs[i]!='+' && cs[i]!='-' && !Character.isDigit(cs[i])) {
+                break;
+            }
+            // +-号相邻的情况
+            while (i<cs.length && (cs[i]=='+' || cs[i]=='-')) {
+                op++;
+                i++;
+            }
+            if (op>1) {
+                break;
+            }
+            while (i<cs.length && Character.isDigit(cs[i])) {
+                sb.append(cs[i]);
+                i++;
+            }
+            if (sb.length()>0) {
+                break;
+            }
+        }
+        if(sb.length()<1) {
+            return 0;
+        }
+        try {
+            int num = Integer.parseInt(sb.toString());
+            return flag ? num : 0 - num;
+        } catch (Exception e) {
+            if (flag) {
+                return Integer.MAX_VALUE;
+            } else {
+                return Integer.MIN_VALUE;
+            }
+        }
+    }
+    
 }
