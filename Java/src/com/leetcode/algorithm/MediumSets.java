@@ -3,8 +3,10 @@
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Queue;
 
 import org.junit.Test;
 
@@ -645,4 +647,328 @@ public class MediumSets {
         }
     }
     
+    @Test
+    public void testFourSum() {
+        System.out.println(fourSum(new int[] {1,0,-1,0,-2,2}, 0));
+        System.out.println(fourSum(new int[] {2,2,2,2,2}, 8));
+        System.out.println(fourSum(new int[] {2,2,2,2}, 0));
+    }
+    
+    public List<List<Integer>> fourSum(int[] nums, int target) {
+        if(nums.length<4){
+            return new ArrayList<List<Integer>>();
+        }
+        int len = nums.length, left, right, sum;
+        List<List<Integer>> res = new ArrayList<>();
+        Arrays.sort(nums);
+        for(int i=0; i<len; i++){
+            for(int j=i+1; j<len-1; j++){
+                left = j+1;
+                right = len-1;
+                while(left<right){
+//                    System.out.println(i+"   "+j+"    "+left+"   "+right);
+                    sum = nums[i]+nums[j]+nums[left]+nums[right];
+                    if (sum==target && !res.contains(Arrays.asList(nums[i], nums[j], nums[left], nums[right]))) {
+                        res.add(Arrays.asList(nums[i], nums[j], nums[left], nums[right]));
+                        left++;
+                        right--;
+                    }
+                    else if (sum<target) {
+                        left++;
+                        while (left<right && nums[left-1]==nums[left]) {left++;}
+                    } else {
+                        right--;
+                        while (left<right && nums[right]==nums[right+1]) {right--;}
+                    }
+                }
+            }
+            
+        }
+        return res;
+    }
+    
+    @Test
+    public void testGenerateParenthesis() {
+        System.out.println(generateParenthesis(3));
+    }
+    
+    public List<String> generateParenthesis(int n) {
+        List<String> res = new ArrayList<>();
+        brack(res, 0, 0, n, new StringBuilder());
+//        res.add("()");
+//        if(n==1){
+//            return res;
+//        }
+//        ArrayList<String> temp = new ArrayList<>();
+//        String con;
+//        for(int i=2; i<=n; i++){
+//            for(String s:res){
+//                // 第一种方式：在两边各加()
+//                con = "("+s+")";
+//                if(!temp.contains(con)){
+//                    temp.add(con);
+//                }
+//                con = "()"+s;
+//                if(!temp.contains(con)){
+//                    temp.add(con);
+//                }
+//                con = s+"()";
+//                if(!temp.contains(con)){
+//                    temp.add(con);
+//                }
+//            }
+//            res=(ArrayList<String>) temp.clone();
+//        }
+        return res;
+        
+        
+    }
+    
+    public void brack(List<String> l, int left, int right, int n, StringBuilder s) {
+        if (s.length()==n*2) {
+            l.add(s.toString());
+            return;
+        }
+        if (left<n) {
+            s.append('(');
+            brack(l, left+1, right, n, s);
+            s.deleteCharAt(s.length()-1);
+        }
+        if (right<left) {
+            s.append(')');
+            brack(l, left, right+1, n, s);
+            s.deleteCharAt(s.length()-1);
+        }
+        
+    }
+    
+    @Test
+    public void testReverse() {
+        ListNode head = new ListNode(0), p=head;
+        for (int i = 1; i < 5; i++) {
+            ListNode r = new ListNode(i);
+            p.next = r;
+            p=p.next;
+        }
+//        p=head;
+//        while(p!=null) {
+//            System.out.println(p.val);
+//            p=p.next;
+//        }
+//      p=reverseLinkedList(head);
+//        p=reverseKLinkedListReturnHead(head, 2);
+        p=reverseKGroup(head, 2);
+        while(p!=null) {
+            System.out.println(p.val);
+            p=p.next;
+        }
+    }
+    
+    public ListNode reverseLinkedList(ListNode head) {
+        ListNode p = head.next, temp;
+        head.next=null;
+        while (p!=null) {
+            temp=p.next;
+            p.next = head.next;
+            head.next = p;
+            p=temp;
+        }
+        return head;
+    }
+    
+    public ListNode reverseKLinkedListReturnHead(ListNode head, int k) {
+        ListNode tempHead = new ListNode();
+        ListNode p = head, temp;
+        for (int i = 0; i < k && p!=null ; i++) {
+            temp=p.next;
+            p.next = tempHead.next;
+            tempHead.next = p;
+            p=temp;
+        }
+        head.next = p;
+        return tempHead.next;
+    }
+    
+    public ListNode reverseKGroup(ListNode head, int k) {
+        if(k==1 | head.next==null){
+            return head;
+        }
+        ListNode res = new ListNode(), p=head;
+        ListNode[] nodes = new ListNode[2];
+        res.next = head;
+        int len=0; // 获得链表长度
+        while(p!=null) {
+            len++;
+            p=p.next;
+        }
+        p = res;
+        for (int i = 0; i < len/k; i++) {
+//            System.err.println(i+"   "+len);
+            nodes = reverseKLinkedList(p, k);
+            System.out.println(nodes[0].val+"++++++"+nodes[1].val);
+            // 记住头
+            if (i==0) {
+                res=nodes[0];
+            }
+            p=nodes[1];
+//            System.out.println(p.val+"-----");
+        }
+        return res;
+    }
+    
+    public ListNode[] reverseKLinkedList(ListNode headnode, int k) {
+        ListNode[] res = new ListNode[2];
+//        ListNode tempHead = new ListNode();
+        ListNode p = headnode.next, temp, r=headnode.next;
+        for (int i = 0; i < k && p!=null ; i++) {
+            temp=p.next;
+            p.next = headnode.next;
+            headnode.next = p;
+            p=temp;
+        }
+        r.next = p;
+        // 返回头和尾
+        res[0]=headnode.next;
+        res[1]=r;
+        return res;
+    }
+    
+    /**
+     * 与动态规划的区别
+     * 共同点
+     *  用于求解多阶段决策问题。多阶段决策问题即：
+     *  求解一个问题分为很多步骤（阶段）；
+     *  每一个步骤（阶段）可以有多种选择。
+     * 不同点
+     *  动态规划只需要求我们评估最优解是多少，最优解对应的具体解是什么并不要求。
+     *  因此很适合应用于评估一个方案的效果；
+     *  回溯算法可以搜索得到所有的方案（当然包括最优解），但是本质上它是一种遍历算法，时间复杂度很高。
+     * */
+    public List<List<Integer>> permuteCon(int[] nums) {
+        Queue<Integer> queue = new LinkedList<>();
+        Queue<Integer> medium = new LinkedList<>();
+        List<Integer> temp = new ArrayList<>();
+        List<List<Integer>> res = new ArrayList<>();
+        int cur=0;
+        for (int i : nums) {
+            queue.offer(i);
+        }
+        while (!queue.isEmpty()) {
+            cur = queue.poll();
+            temp.add(cur);
+            for(int i : nums) {
+                if (i==cur) {
+                    continue;
+                }
+                medium.offer(i);
+            }
+            for(int i=0; i<nums.length-1; i++) {
+                medium.offer(medium.peek());
+                temp.add(medium.poll());
+            }
+            res.add(temp);
+            temp = new ArrayList<>();
+        }
+        return res;
+    }
+    
+    public List<List<Integer>> permute(int[] nums) {
+        List<Integer> temp = new ArrayList<>();
+        List<Integer> visited = new ArrayList<>();
+        List<List<Integer>> res = new ArrayList<>();
+        dfs(res, nums, temp, visited);
+        return res;
+    }
+    
+    public void dfs(List<List<Integer>> res, int[] nums, List<Integer> temp, List<Integer> visited) {
+        if(temp.size()==nums.length) {
+            res.add(new ArrayList<>(temp));
+            return;
+        }
+        for(int i: nums) {
+            if(!visited.contains(i)) {
+                temp.add(i);
+                visited.add(i);
+                dfs(res, nums, temp, visited);
+                visited.remove(visited.size()-1);
+                temp.remove(temp.size()-1);
+            }
+        }
+    }
+    
+    @Test
+    public void testPermute() {
+        System.out.println(permute(new int[] {1,2,3}));
+    }
+    
+    public int[][] merge(int[][] intervals) {
+        ArrayList<int[]> res = new ArrayList<>();
+        
+        int len = intervals.length, k;
+        int[] temp = new int[2];
+        for (int i = 0; i < len; i++) {
+            k=i;
+            for (int j = i+1; j < len; j++) {
+                if(intervals[j][0]<intervals[k][0]) {
+                    k=j;
+                }
+            }
+            if(k!=i) {
+                temp[0]=intervals[i][0];
+                temp[1]=intervals[i][1];
+                
+                intervals[i][0]=intervals[k][0];
+                intervals[i][1]=intervals[k][1];
+                
+                intervals[k][0]=temp[0];
+                intervals[k][1]=temp[1];
+            }
+        }
+        for (int i = 0; i < intervals.length; i++) {
+            for (int j = 0; j < 2; j++) {
+                System.out.print(intervals[i][j]+"   ");
+            }
+            System.out.println();
+        }
+        System.out.println("_______________");
+        
+        int start=intervals[0][0], end=intervals[0][1];
+        for (int i = 1; i < len; i++) {
+//            if(start>=intervals[i][0]&&end<=intervals[i][1]) {
+//                start = intervals[i][0];
+//                end = intervals[i][1];
+//                continue;
+//            }
+            if(end<intervals[i][0]) { // 接不上
+                res.add(new int[] {start, end});
+                start = intervals[i][0];
+                end = intervals[i][1];
+            }
+            else {
+//                start = intervals[i][0];
+                start = start<intervals[i][0]?start:intervals[i][0];
+                end = end>intervals[i][1]?end:intervals[i][1];
+            }
+        }
+        res.add(new int[] {start, end});
+        int[][] ans = new int[res.size()][2];
+        res.toArray(ans);
+        return ans;
+    }
+    
+    @Test
+    public void testMerge() {
+//        int[][] res = merge(new int[][] {{1,3},{2,6},{8,10},{15,18}});
+//        int[][] res = merge(new int[][] {{1,4},{4,6}});
+//        int[][] res = merge(new int[][] {{1,4},{2,3}});
+//        int[][] res = merge(new int[][] {{3,5},{2,3},{9,10},{6,9}});
+        int[][] res = merge(new int[][] {{2,3},{4,5},{6,7},{8,9},{1,10}});
+        for (int i = 0; i < res.length; i++) {
+            for (int j = 0; j < res[i].length; j++) {
+                System.out.print(res[i][j]+"   ");
+            }
+            System.out.println();
+        }
+    }
+
 }
