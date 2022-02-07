@@ -1,6 +1,9 @@
  package com.leetcode.algorithm;
 
 import java.util.ArrayList;
+import java.util.List;
+
+import org.junit.Test;
 
 /**
  * @author MysteryGuest
@@ -128,7 +131,7 @@ public class LeafSimilarTrees {
             for (int i = 0; i < l; i++) {
                 System.out.print("   ");
             }
-            System.out.println(root.val);
+            System.out.println(root.c);
             
             printTree(root.left, l);
         }
@@ -209,6 +212,76 @@ public class LeafSimilarTrees {
         
         System.out.println(leafSimilarTrees.leafSimilar(root1, root2));
     }
+    
+    /**
+     * n位格雷码序列
+     * */
+    public List<Integer> grayCode(int n) {
+        List<Integer> res = new ArrayList<>();
+        TreeNode head = new TreeNode('#');
+        createGrayTree(head, n, true);
+        printTree(head, n);
+        StringBuilder sb = new StringBuilder();
+        preOrder(head, res, sb);
+        for (Integer integer : res) {
+            System.out.println(integer);
+        }
+        return res;
+    }
+    
+    /**
+     * @param flag true表示左子树，false表示右子树
+     * */
+    public void createGrayTree(TreeNode tNode, int n, boolean flag) {
+        if (n<=0) {
+            return;
+        }
+        if (flag) { // 当前节点是父节点的左子树，创建左右子树分别为0,1
+            TreeNode left = new TreeNode('0');
+            TreeNode right = new TreeNode('1');
+            tNode.left = left;
+            tNode.right = right;
+            createGrayTree(left, n-1, true);
+            createGrayTree(right, n-1, false);
+        } else { // 当前节点是父节点的右子树，创建左右子树分别为1,0
+            TreeNode left = new TreeNode('1');
+            TreeNode right = new TreeNode('0');
+            tNode.left = left;
+            tNode.right = right;
+            createGrayTree(left, n-1, true);
+            createGrayTree(right, n-1, false);
+        }
+    }
+    
+    public void preOrder(TreeNode head, List<Integer> list, StringBuilder sb) {
+        if (head==null) {
+            return;
+        }
+        sb.append(head.c);
+        // 是叶子结点
+        if (head.left==null && head.right==null) {
+            System.out.println(sb.substring(1).toString());
+//            System.out.println(Integer.valueOf(sb.substring(1).toString(), 2));
+            list.add(Integer.valueOf(sb.substring(1).toString(), 2));
+            return;
+        }
+        preOrder(head.left, list, sb);
+        sb.deleteCharAt(sb.length()-1);
+        preOrder(head.right, list, sb);
+        sb.deleteCharAt(sb.length()-1);
+        
+
+    }
+    
+    @Test
+    public void testGray() {
+//        TreeNode head = new TreeNode();
+//        createGrayTree(head, 3, true);
+//        printTree(head, 3);
+//        String s = "0011";
+//        System.out.println(Integer.valueOf(s,2));
+        grayCode(3);
+    }
 
 }
 
@@ -218,10 +291,12 @@ public class LeafSimilarTrees {
 
 class TreeNode {
     int val;
+    char c;
     TreeNode left;
     TreeNode right;
     TreeNode() {}
     TreeNode(int val) { this.val = val; }
+    TreeNode(char c) { this.c = c; }
     TreeNode(int val, TreeNode left, TreeNode right) {
         this.val = val;
         this.left = left;
